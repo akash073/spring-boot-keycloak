@@ -6,7 +6,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HelloController {
 
-    @GetMapping(path = {"/","index"})
+    /**
+     *const keycloakCfg = {
+     *   url: "http://localhost:8080/auth",
+     *   realm: "MyDemo",
+     *   clientId: "my-react-client",
+     *   onLoad: 'login-required'
+     * };
+     */
+    @GetMapping(path = {"/", "index"})
     public String hello() {
         return "index";
     }
