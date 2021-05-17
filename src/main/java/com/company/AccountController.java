@@ -1,7 +1,11 @@
 package com.company;
 
+import org.keycloak.KeycloakPrincipal;
+import org.keycloak.representations.AccessToken;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +27,23 @@ public class AccountController {
         return "hello";
     }
 
-    @GetMapping(path = "/promoters")
-    public String promoters() {
-        return "hello world";
+    @GetMapping(path = "/user")
+    public String user() {
+        return "hello user";
     }
 
-    @GetMapping(path = "/supervisors")
+    @GetMapping(path = "/actor")
     public String supervisors() {
-        return "hello world";
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        KeycloakPrincipal keycloakPrincipal = (KeycloakPrincipal) authentication.getPrincipal();
+
+        AccessToken token = keycloakPrincipal.getKeycloakSecurityContext().getToken();
+
+        System.out.println(authentication);
+        System.out.println(token.getEmail());
+
+        return "hello actor";
     }
 }
