@@ -4,6 +4,7 @@ import com.company.response.ErrorResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
@@ -11,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
@@ -34,7 +36,9 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         Gson gson = new GsonBuilder().serializeNulls().create();
         String jsonResponse = gson.toJson(errorResponse);
 
-        response.setStatus(200);
+        response.setStatus(httpStatus.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
         response.getWriter().write(jsonResponse);
 
     }

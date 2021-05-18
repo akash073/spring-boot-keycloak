@@ -1,5 +1,6 @@
 package com.company;
 
+import com.company.response.SuccessResponse;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.representations.AccessToken;
 import org.springframework.http.MediaType;
@@ -19,8 +20,8 @@ import javax.annotation.security.RolesAllowed;
 public class AccountController {
 
     @GetMapping(path = "/hello")
-    public String hello() {
-        return "hello world";
+    public SuccessResponse<String> hello() {
+        return new SuccessResponse<>("hello world");
     }
 
     @PreAuthorize("isAuthenticated()")

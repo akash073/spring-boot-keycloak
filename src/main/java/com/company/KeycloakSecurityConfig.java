@@ -23,6 +23,7 @@ import org.springframework.context.annotation.*;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -112,13 +113,15 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry =
                 http.cors()
                 .and()
-                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())//
-                .and() //
+
                 .csrf().disable() //
 //                .anonymous().disable() //
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //
                 .and() //
-                .authorizeRequests();
+                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
+                        .and()
+
+                .authorizeRequests() .antMatchers( "/favicon.ico").permitAll();
 
         expressionInterceptUrlRegistry = expressionInterceptUrlRegistry
                 .antMatchers("/iam/accounts/**")
@@ -194,6 +197,12 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(keycloakAuthenticationProvider());
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers(/*"/**",*/ "/v2/api-docs", "/configuration/ui", "/swagger-resources",
+                "/configuration/security", "/swagger-ui.html", "/webjars/**","/swagger-ui/index.html","/v3/api-docs/**","/swagger-ui/**");
     }
 
 }
