@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.security.RolesAllowed;
+
 @RestController
 @RequestMapping(path = "/iam/accounts", produces = MediaType.APPLICATION_JSON_VALUE)
 @Validated
@@ -27,11 +29,20 @@ public class AccountController {
         return "hello";
     }
 
+    @RolesAllowed({"ROLE_USER"})
     @GetMapping(path = "/user")
     public String user() {
         return "hello user";
     }
 
+    @RolesAllowed({"ROLE_MANAGER"})
+    @GetMapping(path = "/manager")
+    public String manager() {
+        return "hello manager";
+    }
+
+
+    @RolesAllowed({"ROLE_ACTOR"})
     @GetMapping(path = "/actor")
     public String supervisors() {
 

@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c64e5410-db05-4a87-881c-155711188887" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/company/config/CORSFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/company/CustomKeycloakAuthenticationProvider.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/company/RoleResolvingGrantedAuthoritiesMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/company/config/CustomAuthenticationEntryPoint.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-boot-keyclaok.iml" beforeDir="false" afterPath="$PROJECT_DIR$/spring-boot-keyclaok.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/company/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/company/AccountController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/company/KeycloakSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/company/KeycloakSecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
@@ -83,7 +87,9 @@
       <option name="presentableId" value="Default" />
       <updated>1621260437338</updated>
       <workItem from="1621260440967" duration="118000" />
-      <workItem from="1621260575160" duration="6772000" />
+      <workItem from="1621260575160" duration="7559000" />
+      <workItem from="1621310240850" duration="20000" />
+      <workItem from="1621310430484" duration="7105000" />
     </task>
     <servers />
   </component>
@@ -95,65 +101,49 @@
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state x="511" y="164" width="960" height="786" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog/72.27.1848.1053@72.27.1848.1053" timestamp="1621260468693" />
-    <state x="697" y="283" width="710" height="535" key="#xdebugger.evaluate" timestamp="1621267600314">
+    <state x="697" y="283" width="1058" height="755" key="#xdebugger.evaluate" timestamp="1621310990988">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
-    <state x="697" y="283" width="710" height="535" key="#xdebugger.evaluate/72.27.1848.1053@72.27.1848.1053" timestamp="1621267600314" />
+    <state x="697" y="283" width="1058" height="755" key="#xdebugger.evaluate/72.27.1848.1053@72.27.1848.1053" timestamp="1621310990988" />
     <state x="390" y="81" width="1201" height="951" key="CommitChangelistDialog2" timestamp="1621263769183">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state x="390" y="81" width="1201" height="951" key="CommitChangelistDialog2/72.27.1848.1053@72.27.1848.1053" timestamp="1621263769183" />
-    <state width="1792" height="314" key="GridCell.Tab.0.bottom" timestamp="1621267618589">
+    <state width="1792" height="314" key="GridCell.Tab.0.bottom" timestamp="1621329933138">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
-    <state width="1792" height="314" key="GridCell.Tab.0.bottom/72.27.1848.1053@72.27.1848.1053" timestamp="1621267618589" />
-    <state width="1792" height="314" key="GridCell.Tab.0.center" timestamp="1621267618588">
+    <state width="1792" height="314" key="GridCell.Tab.0.bottom/72.27.1848.1053@72.27.1848.1053" timestamp="1621329933138" />
+    <state width="1792" height="314" key="GridCell.Tab.0.center" timestamp="1621329933137">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
-    <state width="1792" height="314" key="GridCell.Tab.0.center/72.27.1848.1053@72.27.1848.1053" timestamp="1621267618588" />
-    <state width="1792" height="314" key="GridCell.Tab.0.left" timestamp="1621267618588">
+    <state width="1792" height="314" key="GridCell.Tab.0.center/72.27.1848.1053@72.27.1848.1053" timestamp="1621329933137" />
+    <state width="1792" height="314" key="GridCell.Tab.0.left" timestamp="1621329933136">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
-    <state width="1792" height="314" key="GridCell.Tab.0.left/72.27.1848.1053@72.27.1848.1053" timestamp="1621267618588" />
-    <state width="1792" height="314" key="GridCell.Tab.0.right" timestamp="1621267618588">
+    <state width="1792" height="314" key="GridCell.Tab.0.left/72.27.1848.1053@72.27.1848.1053" timestamp="1621329933136" />
+    <state width="1792" height="314" key="GridCell.Tab.0.right" timestamp="1621329933138">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
-    <state width="1792" height="314" key="GridCell.Tab.0.right/72.27.1848.1053@72.27.1848.1053" timestamp="1621267618588" />
-    <state width="1792" height="314" key="GridCell.Tab.1.bottom" timestamp="1621267618495">
+    <state width="1792" height="314" key="GridCell.Tab.0.right/72.27.1848.1053@72.27.1848.1053" timestamp="1621329933138" />
+    <state width="1792" height="314" key="GridCell.Tab.1.bottom" timestamp="1621329933026">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
-    <state width="1792" height="314" key="GridCell.Tab.1.bottom/72.27.1848.1053@72.27.1848.1053" timestamp="1621267618495" />
-    <state width="1792" height="314" key="GridCell.Tab.1.center" timestamp="1621267618495">
+    <state width="1792" height="314" key="GridCell.Tab.1.bottom/72.27.1848.1053@72.27.1848.1053" timestamp="1621329933026" />
+    <state width="1792" height="314" key="GridCell.Tab.1.center" timestamp="1621329933026">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
-    <state width="1792" height="314" key="GridCell.Tab.1.center/72.27.1848.1053@72.27.1848.1053" timestamp="1621267618495" />
-    <state width="1792" height="314" key="GridCell.Tab.1.left" timestamp="1621267618495">
+    <state width="1792" height="314" key="GridCell.Tab.1.center/72.27.1848.1053@72.27.1848.1053" timestamp="1621329933026" />
+    <state width="1792" height="314" key="GridCell.Tab.1.left" timestamp="1621329933026">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
-    <state width="1792" height="314" key="GridCell.Tab.1.left/72.27.1848.1053@72.27.1848.1053" timestamp="1621267618495" />
-    <state width="1792" height="314" key="GridCell.Tab.1.right" timestamp="1621267618495">
+    <state width="1792" height="314" key="GridCell.Tab.1.left/72.27.1848.1053@72.27.1848.1053" timestamp="1621329933026" />
+    <state width="1792" height="314" key="GridCell.Tab.1.right" timestamp="1621329933026">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
-    <state width="1792" height="314" key="GridCell.Tab.1.right/72.27.1848.1053@72.27.1848.1053" timestamp="1621267618495" />
+    <state width="1792" height="314" key="GridCell.Tab.1.right/72.27.1848.1053@72.27.1848.1053" timestamp="1621329933026" />
     <state x="361" y="101" width="1269" height="912" key="SettingsEditor" timestamp="1621260784371">
       <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state x="361" y="101" width="1269" height="912" key="SettingsEditor/72.27.1848.1053@72.27.1848.1053" timestamp="1621260784371" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/company/AccountController.java</url>
-          <line>39</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/company/AccountController.java</url>
-          <line>38</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

@@ -1,8 +1,9 @@
 package com.company;
 
+import com.company.config.CustomAuthenticationEntryPoint;
 import org.keycloak.adapters.KeycloakConfigResolver;
 import org.keycloak.adapters.springboot.KeycloakSpringBootProperties;
-import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
+import org.keycloak.adapters.springsecurity.KeycloakSecurityComponents;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.keycloak.adapters.springsecurity.client.KeycloakClientRequestFactory;
 import org.keycloak.adapters.springsecurity.client.KeycloakRestTemplate;
@@ -17,32 +18,46 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.*;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 //https://gist.github.com/czetsuya/82fe3c9e8b612d82975cc582b962dc16
-@KeycloakConfiguration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//https://stackoverflow.com/a/51671755
+/*@KeycloakConfiguration
+@EnableGlobalMethodSecurity(prePostEnabled = true)*/
+@EnableWebSecurity
+@Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true,
+        securedEnabled = true,
+        jsr250Enabled = true)
+@ComponentScan(basePackageClasses = KeycloakSecurityComponents.class)
 public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
     private final KeycloakClientRequestFactory keycloakClientRequestFactory;
+
 
     public KeycloakSecurityConfig(KeycloakClientRequestFactory keycloakClientRequestFactory) {
         this.keycloakClientRequestFactory = keycloakClientRequestFactory;
 
         // to use principal and authentication together with @async
         SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
+    }
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint(){
+        return new CustomAuthenticationEntryPoint();
     }
 
     /**
@@ -101,10 +116,12 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
                 .and() //
                 .authorizeRequests();
 
-        expressionInterceptUrlRegistry = expressionInterceptUrlRegistry.antMatchers("/iam/accounts/user/*").hasRole("USER");
-        expressionInterceptUrlRegistry = expressionInterceptUrlRegistry.antMatchers("/iam/accounts/actor/*").hasRole("ACTOR");
+        expressionInterceptUrlRegistry = expressionInterceptUrlRegistry
+                .antMatchers("/iam/accounts/**")
+                .hasAnyRole("MANAGER","ACTOR");
+      //  expressionInterceptUrlRegistry = expressionInterceptUrlRegistry.antMatchers("/iam/accounts/actor/*").hasRole("ACTOR");
 
-        expressionInterceptUrlRegistry.anyRequest().permitAll();
+        expressionInterceptUrlRegistry.anyRequest().authenticated();
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -115,7 +132,6 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
         registrationBean.setEnabled(false);
         return registrationBean;
     }
-
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Bean
     public FilterRegistrationBean keycloakPreAuthActionsFilterRegistrationBean(KeycloakPreAuthActionsFilter filter) {
@@ -153,6 +169,27 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
     @Bean
     public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
         return new ServletListenerRegistrationBean<>(new HttpSessionEventPublisher());
+    }
+
+
+
+    @Bean
+    public GrantedAuthoritiesMapper grantedAuthoritiesMapper() {
+        SimpleAuthorityMapper mapper = new SimpleAuthorityMapper();
+        mapper.setConvertToUpperCase(true);
+        return mapper;
+    }
+
+    @Override
+    protected KeycloakAuthenticationProvider keycloakAuthenticationProvider() {
+        final KeycloakAuthenticationProvider provider = super.keycloakAuthenticationProvider();
+        provider.setGrantedAuthoritiesMapper(grantedAuthoritiesMapper());
+        return provider;
+    }
+
+    @Override
+    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(keycloakAuthenticationProvider());
     }
 
 }
