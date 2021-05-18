@@ -19,6 +19,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest req, HttpServletResponse res, AuthenticationException authException) throws IOException, ServletException {
         res.setContentType("application/json;charset=UTF-8");
         res.setStatus(403);
-        res.getWriter().write("HELLO EOLT");
+        res.getWriter().write("HELLO FROM CustomAuthenticationEntryPoint (403 response)");
     }
 }

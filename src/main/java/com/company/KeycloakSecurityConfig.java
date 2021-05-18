@@ -1,5 +1,6 @@
 package com.company;
 
+import com.company.config.CustomAccessDeniedHandler;
 import com.company.config.CustomAuthenticationEntryPoint;
 import org.keycloak.adapters.KeycloakConfigResolver;
 import org.keycloak.adapters.springboot.KeycloakSpringBootProperties;
@@ -108,7 +109,10 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
     protected void configure(HttpSecurity http) throws Exception {
 
         super.configure(http);
-        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry = http.cors() //
+        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry =
+                http.cors()
+                .and()
+                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())//
                 .and() //
                 .csrf().disable() //
 //                .anonymous().disable() //
@@ -121,7 +125,7 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
                 .hasAnyRole("MANAGER","ACTOR");
       //  expressionInterceptUrlRegistry = expressionInterceptUrlRegistry.antMatchers("/iam/accounts/actor/*").hasRole("ACTOR");
 
-        expressionInterceptUrlRegistry.anyRequest().authenticated();
+        expressionInterceptUrlRegistry.anyRequest().denyAll();
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
