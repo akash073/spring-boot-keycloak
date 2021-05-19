@@ -16,6 +16,8 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class KeycloakRestService {
 
+    private final String grantType = "password";
+
     @Autowired
     private RestTemplate restTemplate;
 
@@ -34,7 +36,7 @@ public class KeycloakRestService {
      * @return
      */
     public String login(String username, String password) {
-        String grantType = "password";
+
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("username",username);
         map.add("password",password);
